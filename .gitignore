@@ -1,0 +1,8 @@
+.DS_Store
+
+dist/**
+dist.zip
+src.zip
+
+node_modules
+yarn-error.log

@@ -1,0 +1,47 @@
+{
+  "manifest_version": 2,
+  "name": "Search Period",
+  "short_name": "Search Period",
+  "version": "1.0.0",
+
+  "default_locale": "ja",
+  "description": "Search Period",
+  "icons": {
+  },
+
+  "browser_action": {
+    "default_icon": {
+    },
+    "default_title": "search period",
+    "default_popup": "data/templates/popup.html"
+  },
+
+  "background": {
+    "persistent": false,
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+      ],
+      "run_at": "document_idle",
+      "js": [
+        "content_script.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    "popup.js"
+  ],
+
+  "permissions": [
+    "webNavigation",
+    "tabs",
+    "activeTab",
+    "storage",
+    "notifications"
+  ]
+
+}

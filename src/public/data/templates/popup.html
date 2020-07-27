@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body id="popup">
+
+  <section id="description">
+    <h2>Search Period</h2>
+  </section>
+
+  <section id="error" class="hidden"></section>
+
+  <section class="setting">
+    <h3>Set search period</h3>
+    <input id="flatpickr" type="text" />
+  </section>
+
+  <section class="setting">
+    <h3>Set search keyword</h3>
+    <input id="keyword" list="keywordList" autocomplete="off">
+    <datalist id="keywordList">
+    </datalist>
+  </section>
+
+  <button id="execute">Search</button>
+
+</body>
+
+</html>
