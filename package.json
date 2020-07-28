@@ -6,8 +6,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --esModuleInterop true",
-    "lint": "eslint ./src/**/*.ts",
-    "lint:fix": "eslint --fix ./src/**/*.ts",
+    "lint": "eslint './src/**/*.ts'",
+    "lint:fix": "eslint --fix './src/**/*.ts'",
     "webpack:dev": "rimraf ./dist && yarn build && webpack --mode development",
     "webpack:prd": "rimraf ./dist && yarn build && webpack --mode production",
     "clean-install": "rimraf ./node_modules && yarn install"

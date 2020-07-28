@@ -1,10 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
-import webpack from 'webpack';
 
 export default async () => {
-  const environment = await import(`./src/const/.env/${process.env.ENVIRONMENT || 'dev'}.ts`);
-  let config = {
+  const config = {
     devtool: 'cheap-module-source-map',
     entry: {
       background: './src/background.ts',
@@ -17,35 +16,35 @@ export default async () => {
     },
     module: {
       rules: [{
-          test: /\.html$/i,
-          loader: 'html-loader',
-        }, {
-          test: /\.ts$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'ts-loader',
-          },
-        }, {
-          test: /\.s[ac]ss$/i,
-          use: [
-            'style-loader', // 3: Insert`style` tag into HTML
-            'css-loader',   // 2: Translates CSS into CommonJS
-            'sass-loader',  // 1: Compiles Sass to CSS
-          ],
+        test: /\.html$/i,
+        loader: 'html-loader',
+      }, {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'ts-loader',
         },
-        {
-          test: /\.woff(2)?|ttf|eot|svg|png|jpe?g|gif$/i,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                esModule: false,
-                publicPath: '',
-                outputPath: 'data/images',
-              },
+      }, {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'style-loader', // 3: Insert`style` tag into HTML
+          'css-loader', // 2: Translates CSS into CommonJS
+          'sass-loader', // 1: Compiles Sass to CSS
+        ],
+      },
+      {
+        test: /\.woff(2)?|ttf|eot|svg|png|jpe?g|gif$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              esModule: false,
+              publicPath: '',
+              outputPath: 'data/images',
             },
-          ],
-        },
+          },
+        ],
+      },
       ],
     },
     resolve: {
@@ -54,9 +53,6 @@ export default async () => {
       ],
     },
     plugins: [
-      new webpack.DefinePlugin({
-        'process.env.ENVIRONMENT': JSON.stringify(environment.default),
-      }),
       new CopyWebpackPlugin({
         patterns: [
           {

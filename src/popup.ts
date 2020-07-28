@@ -1,14 +1,9 @@
 /*
  * manifest.json で登録される action (popup.html) で実行される処理
  */
-import Message from './helpers/message';
 import flatpickr from 'flatpickr';
 
 import './public/data/css/popup.scss';
-import './public/data/images/selena_32.png';
-
-const handlers = {};
-Message.addEventHandlers(handlers);
 
 // 期間指定下限
 const oldest = '1970-01-01 00:00:00';
@@ -33,7 +28,6 @@ const date = {
   to: today,
 };
 
-
 const executeButton = document.getElementById('execute');
 const keywordList = document.getElementById('keywordList');
 const keyword = <HTMLInputElement>document.getElementById('keyword');
@@ -41,13 +35,12 @@ const keyword = <HTMLInputElement>document.getElementById('keyword');
 // https://qiita.com/Sekky0905/items/a88721f2af41050c93f2
 
 // ポップアップ起動時
-(async() => {
+(async () => {
   if (!keywordList) {
-    return;
+    console.log('not found keyword list');
   }
 
   // 検索履歴読み込み
-
 })();
 
 // 実行ボタン押下時
@@ -55,9 +48,7 @@ if (executeButton) {
   executeButton.onclick = (event: Event) => {
     event.preventDefault();
 
-    const selectedDates = fp.selectedDates.sort((a: any, b: any) => {
-      return (a.getTime() > b.getTime());
-    });
+    const selectedDates = fp.selectedDates.sort((a: any, b: any) => (a.getTime() > b.getTime()));
 
     // 検索対象期間指定
     date.from = fp.formatDate(selectedDates[0], 'Y-m-d');
@@ -65,6 +56,7 @@ if (executeButton) {
 
     // 検索キーワード設定
     const history = String(keyword.value);
+    console.log(history);
 
     // 履歴に保存
 
@@ -73,4 +65,3 @@ if (executeButton) {
     window.close();
   };
 }
-

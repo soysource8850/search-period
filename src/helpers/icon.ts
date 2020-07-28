@@ -4,8 +4,7 @@
 import { browser } from 'webextension-polyfill-ts';
 
 class Icon {
-
-  setDefault() {
+  static setDefault() {
     return browser.browserAction.setIcon({
       path: {
 
@@ -13,7 +12,7 @@ class Icon {
     });
   }
 
-  setExecution() {
+  static setExecution() {
     return browser.browserAction.setIcon({
       path: {
 
