@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Search Period",
   "short_name": "Search Period",
-  "version": "1.0.0",
+  "version": "1.0.1",
 
   "default_locale": "en",
   "description": "Type a period in your search.",
@@ -48,11 +48,8 @@
   ],
 
   "permissions": [
-    "webNavigation",
     "tabs",
-    "activeTab",
-    "storage",
-    "notifications"
+    "storage"
   ]
 
 }
