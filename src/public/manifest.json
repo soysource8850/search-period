@@ -4,13 +4,23 @@
   "short_name": "Search Period",
   "version": "1.0.0",
 
-  "default_locale": "ja",
-  "description": "Search Period",
+  "default_locale": "en",
+  "description": "Type a period in your search.",
   "icons": {
+    "16": "data/images/search_period_16.png",
+    "32": "data/images/search_period_32.png",
+    "64": "data/images/search_period_64.png",
+    "128": "data/images/search_period_128.png",
+    "1024": "data/images/search_period_1024.png"
   },
 
   "browser_action": {
     "default_icon": {
+      "16": "data/images/search_period_16.png",
+      "32": "data/images/search_period_32.png",
+      "64": "data/images/search_period_64.png",
+      "128": "data/images/search_period_128.png",
+      "1024": "data/images/search_period_1024.png"
     },
     "default_title": "search period",
     "default_popup": "data/templates/popup.html"
@@ -25,10 +35,11 @@
   "content_scripts": [
     {
       "matches": [
+        "https://www.google.com/search*"
       ],
       "run_at": "document_idle",
       "js": [
-        "content_script.js"
+        "content_scripts.js"
       ]
     }
   ],

@@ -1,7 +1,3 @@
-/*
- * manifest.json で登録される background 処理
+/**
+ * index of background
  */
-import Message from './helpers/message';
-
-const handlers = {};
-Message.addEventHandlers(handlers);
