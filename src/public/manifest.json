@@ -39,7 +39,7 @@
       ],
       "run_at": "document_idle",
       "js": [
-        "content_script.js"
+        "content_scripts.js"
       ]
     }
   ],

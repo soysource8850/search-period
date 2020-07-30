@@ -8,7 +8,7 @@ export default async () => {
     entry: {
       background: './src/background.ts',
       popup: './src/popup.ts',
-      content_script: './src/content_script.ts',
+      content_scripts: './src/content_scripts.ts',
     },
     output: {
       path: `${__dirname}/dist`,
