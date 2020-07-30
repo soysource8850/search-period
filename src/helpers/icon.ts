@@ -1,24 +1,26 @@
 /*
- * エクステンションアイコン制御ヘルパー
+ * icons helper
  */
+
 import { browser } from 'webextension-polyfill-ts';
 
-class Icon {
-  static setDefault() {
-    return browser.browserAction.setIcon({
-      path: {
+const imagesDir = '../data/images/';
+const imagesList = {
+  16: '',
+  32: '',
+  64: '',
+  128: '',
+  1024: '',
+};
 
-      },
-    });
-  }
+export default function setDefault() {
+  const iconPrefix = 'search_period_';
 
-  static setExecution() {
-    return browser.browserAction.setIcon({
-      path: {
+  Object.keys(imagesList).forEach((size) => {
+    Object.assign(imagesList, { [size]: `${imagesDir}${iconPrefix}` });
+  });
 
-      },
-    });
-  }
+  return browser.browserAction.setIcon({
+    path: imagesList,
+  });
 }
-
-export default new Icon();
