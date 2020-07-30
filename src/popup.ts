@@ -1,76 +1,106 @@
-/*
- * manifest.json で登録される action (popup.html) で実行される処理
+/**
+ * web_accessible_resources
+ * browser popup
  */
-import Message from './helpers/message';
+
 import flatpickr from 'flatpickr';
+import { browser } from 'webextension-polyfill-ts';
+
+import { STORAGE_KEYS, ORDERST_SEARCH_DATE } from './const/index';
+import { getStorage } from './helpers/storage';
 
 import './public/data/css/popup.scss';
-import './public/data/images/selena_32.png';
 
-const handlers = {};
-Message.addEventHandlers(handlers);
-
-// 期間指定下限
-const oldest = '1970-01-01 00:00:00';
-
-// 取得期間日付選択
+// setting flatpicker
 const fp: any = flatpickr('#flatpickr', {
   inline: false,
   mode: 'range',
-  minDate: oldest,
+  minDate: ORDERST_SEARCH_DATE,
   maxDate: 'today',
-  dateFormat: 'Y-m-d',
+  dateFormat: 'm/d/Y',
   defaultDate: [
-    oldest, // TODO: 前回日付
+    ORDERST_SEARCH_DATE,
     'today',
   ],
 });
 
-const today: string = fp.formatDate(new Date(), 'Y-m-d');
-
-const date = {
-  from: oldest, // TODO: 前回日付
-  to: today,
+const period = {
+  start: ORDERST_SEARCH_DATE,
+  end: fp.formatDate(new Date(), 'm/d/Y'),
 };
 
-
 const executeButton = document.getElementById('execute');
-const keywordList = document.getElementById('keywordList');
+const keywordHistory = document.getElementById('keywordHistory');
 const keyword = <HTMLInputElement>document.getElementById('keyword');
-// https://developer.mozilla.org/ja/docs/Web/API/HTMLInputElement
-// https://qiita.com/Sekky0905/items/a88721f2af41050c93f2
 
-// ポップアップ起動時
-(async() => {
-  if (!keywordList) {
-    return;
-  }
+// popup open
+(async () => {
+  const tbs: Tbs = {};
+  period.start = ORDERST_SEARCH_DATE;
 
-  // 検索履歴読み込み
+  const history: Array<{[key:string]: string}> = await getStorage(STORAGE_KEYS.history);
 
+  history.reverse().forEach((params, index, historyList) => {
+    // generate history
+    const option = document.createElement('option');
+    option.label = String(index);
+    option.value = params.q;
+
+    if (keywordHistory) {
+      keywordHistory.appendChild(option);
+    }
+
+    // set start date by last history
+    if (index + 1 === historyList.length && params.tbs && params.tbs.length > 0) {
+      params.tbs.split(',').forEach((keyValue: string) => {
+        const [key, value] = keyValue.split(':');
+        Object.defineProperty(tbs, key, { value });
+      });
+      period.start = tbs.cd_min || ORDERST_SEARCH_DATE;
+
+      fp.setDate(Object.values(period), true, 'm/d/Y');
+    }
+  });
 })();
 
-// 実行ボタン押下時
+// TODO: add period change event when history is selected
+
+// press execute button
 if (executeButton) {
   executeButton.onclick = (event: Event) => {
     event.preventDefault();
 
-    const selectedDates = fp.selectedDates.sort((a: any, b: any) => {
-      return (a.getTime() > b.getTime());
+    const params = new URLSearchParams();
+
+    // set keywords
+    params.append('q', keyword.value);
+
+    // set date
+    const selectedDates = fp.selectedDates.sort((a: any, b: any) => (a.getTime() > b.getTime()));
+    period.start = fp.formatDate(selectedDates[0], 'm/d/Y');
+    period.end = fp.formatDate(selectedDates[1], 'm/d/Y');
+
+    const tbs: Tbs = {
+      cdr: '1',
+      cd_min: period.start,
+      cd_max: period.end,
+    };
+
+    let tbsValue = '';
+
+    Object.entries(tbs).forEach(([k, v]) => {
+      tbsValue += `${k}:${v},`;
     });
+    tbsValue = tbsValue.slice(0, -1);
 
-    // 検索対象期間指定
-    date.from = fp.formatDate(selectedDates[0], 'Y-m-d');
-    date.to = fp.formatDate(selectedDates[1], 'Y-m-d');
+    params.append('tbs', tbsValue);
 
-    // 検索キーワード設定
-    const history = String(keyword.value);
+    // generate google search url
+    const url = new URL('https://www.google.com/search');
+    url.search = params.toString();
 
-    // 履歴に保存
-
-    // 検索
+    browser.tabs.update({ url: url.href });
 
     window.close();
   };
 }
-
